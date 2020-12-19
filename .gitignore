@@ -1,5 +1,5 @@
-*.o
-*.out
-backup
-makefile
-log
+./*.o
+./*.out
+./backup
+./makefile
+./log
