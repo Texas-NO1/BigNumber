@@ -2,4 +2,4 @@
 *.out
 backup
 makefile
-.log
+*.log
