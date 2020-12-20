@@ -12,7 +12,6 @@ class BigNumber {
 public:
     BigNumber();
     BigNumber(const std::string &);
-    BigNumber(const int);
     BigNumber(const long long);
     BigNumber(const BigNumber &);
     bool operator<(const BigNumber &);
@@ -31,17 +30,22 @@ public:
     BigNumber& operator*=(const BigNumber &);
     BigNumber& operator/=(const BigNumber &);
     BigNumber& operator%=(const BigNumber &);
+    int compare(const BigNumber&);
     std::string value() const;
     int length() const;
     bool isodd() const;
+    friend std::istream& operator>>(std::istream&, BigNumber&);
+    friend std::ostream& operator<<(std::ostream&, BigNumber&);
 private:
     int sign;
     std::string data;
     //底层函数
     BigNumber(const int, const std::string &);//用符号和数值进行赋值，不公开
     void filter();//将data过滤成,一个非负数和一个符号位，规定0符号为+
+    void judge();//由string初始化后的data是否为有效数字
     int format(std::string &);//格式化字符串，消除前置0和符号位，并返回符号位
-    int compare(const std::string &, const std::string &);//比较函数的底层函数
+    int compare(const std::string &, const std::string &);//非负数比较函数的底层函数
+    int compare(int, const std::string &, int, const std::string &);//带符号比较函数
     void calculate(char, int, const std::string &, int, const std::string &, int &, std::string &);// 符号数计算器，计算得到的结果c_sign和c_data以参数形式返回
     char search_digit(const std::string &, const std::string &);//寻找最后一个满足a=b*digit的digit, 除余算法用
     void divide(const std::string &, const std::string &, std::string &, std::string &);//除余算法的底层函数

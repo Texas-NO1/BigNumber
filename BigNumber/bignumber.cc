@@ -10,38 +10,30 @@
 }
 using namespace std;
 BigNumber::BigNumber():data("0"),sign(0){}
-BigNumber::BigNumber(const string &val):data(val){
-    if (data == "") data = "0";
-    int ind = 0;
-    if (data[ind] == '-' || data[ind] == '+') ind++;
-    while (ind < data.size() && isdigit(data[ind])) ind++;
-    if (ind != data.size()) {
-        WARNING("invalid value: %s\n", data.c_str())
-        data = "0";
-    }
-    filter();
-}
-BigNumber::BigNumber(const BigNumber &b):data(b.data),sign(b.sign){filter();}
-BigNumber::BigNumber(const int val):data(to_string(val)){filter();}
+BigNumber::BigNumber(const string &val):data(val){filter();judge();}
+BigNumber::BigNumber(const BigNumber &b):data(b.data),sign(b.sign){}
 BigNumber::BigNumber(const long long val):data(to_string(val)){filter();}
 BigNumber::BigNumber(int news, const string &val):sign(news),data(val){}
 bool BigNumber::operator<(const BigNumber &b) {
-    return less(data, b.data);
+    return compare(b) < 0;
 }
 bool BigNumber::operator<=(const BigNumber &b) {
-    return less_equal(data, b.data);
+    return compare(b) <= 0;
 }
 bool BigNumber::operator>(const BigNumber &b) {
-    return greater(data, b.data);
+    return compare(b) > 0;
 }
 bool BigNumber::operator>=(const BigNumber &b) {
-    return greater_equal(data, b.data);
+    return compare(b) >= 0;
 }
 bool BigNumber::operator==(const BigNumber &b) {
-    return equal(data, b.data);
+    return compare(b) == 0;
 }
 bool BigNumber::operator!=(const BigNumber &b) {
-    return not_equal(data, b.data);
+    return compare(b) != 0;
+}
+int BigNumber::compare(const BigNumber& b) {
+    return compare(sign, data, b.sign, b.data);
 }
 BigNumber BigNumber::operator+(const BigNumber &big) {
     int c_sign;
@@ -103,9 +95,28 @@ int BigNumber::length() const {
 bool BigNumber::isodd() const {
     return (data[data.length() - 1] - '0') % 2 == 1;
 }
+istream& operator>>(istream& in, BigNumber& big) {
+    in >> big.data;
+    big.filter();
+    big.judge();
+    return in;
+}
+ostream& operator<<(ostream& out, BigNumber& big) {
+    out << big.value();
+    return out;
+}
 
 void BigNumber::filter() {
     sign = format(data);
+}
+void BigNumber::judge() {
+    for (int i = 0; i < data.size(); i++) {
+        if (isdigit(data[i])) continue;
+        WARNING("invalid value: %s\n", data.c_str())
+        data = "0";
+        sign = 0;
+        break;
+    }
 }
 int BigNumber::format(string &s) {
     if (s == "") {
@@ -126,6 +137,27 @@ int BigNumber::compare(const string &a, const string &b) {
         if (a[i] < b[i]) return -1;
     }
     return 0;
+}
+int BigNumber::compare(int sa, const  string &a, int sb, const string &b) {
+    int code = 0, cmp = 0;
+    code |= sa;
+    code <<= 1;
+    code |= sb;
+    switch (code) {
+        case 0:
+            cmp = compare(a, b);
+            break;
+        case 1:
+            cmp = 1;
+            break;
+        case 2:
+            cmp = -1;
+            break;
+        case 3:
+            cmp = - compare(a, b);
+            break;
+    }
+    return cmp;
 }
 void BigNumber::calculate(char op, int sa, const string &a, int sb, const string &b, int &sc, string &c){
     int code = 0;
