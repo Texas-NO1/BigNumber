@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdio>
-#include <bignumber.h>
+#include "bignumber.h"
 #define COLOR(a, b) "\033[0;" #b "m" a "\033[0m"
 #define RED(a) COLOR(a, 31)
 #define WARNING(format, message...) {\
