@@ -44,18 +44,18 @@ big ex_gcd(big a, big b, big &x, big &y) {
     return ans;
 }
 int main() {
+    big a, b;
+    cin >> a >> b;
+    cout << (a / b) << endl;
+    cout << (a % b) << endl;
+    cout << (a / b) * b + (a % b) << endl;
+    return 0;
     prime_init();
     srand(time(0));
     //int p =prime[rand() % prime[0] + 1], q = prime[rand() % prime[0] + 1];
-    int len = 1024;
-    big num = 1;
-    for (int i = 0; i < len; i++) {
-        cout << num << endl;
-        num *= 2;
-    }
-    return 0;
     big p = 397, q = 401;
     big n = getn(p, q);
+    P(n)
     big fn = getfn(p, q);
     big e = 343;
     big d = getd(e, fn);

@@ -101,7 +101,7 @@ istream& operator>>(istream& in, BigNumber& big) {
     big.judge();
     return in;
 }
-ostream& operator<<(ostream& out, BigNumber& big) {
+ostream& operator<<(ostream& out, BigNumber big) {
     out << big.value();
     return out;
 }

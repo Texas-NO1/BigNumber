@@ -34,8 +34,8 @@ public:
     std::string value() const;
     int length() const;
     bool isodd() const;
-    friend std::istream& operator>>(std::istream&, BigNumber&);
-    friend std::ostream& operator<<(std::ostream&, BigNumber&);
+    friend std::istream& operator>>(std::istream&, BigNumber&);//输入传引用，因为必须对具体的BigNumber对象进行输入
+    friend std::ostream& operator<<(std::ostream&, BigNumber);//输出传对象，因为既可以输出对象也可以输出临时产生的变量，如运算的返回值
 private:
     int sign;
     std::string data;
