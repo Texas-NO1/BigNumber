@@ -1,4 +1,4 @@
-#include <string>
+#include <iostream>
 #include <algorithm>
 #include <cstdio>
 #include <bignumber.h>
@@ -8,7 +8,10 @@
     printf(RED("waring: "));\
     printf(format,##message);\
 }
-using namespace std;
+using std::string;
+using std::istream;
+using std::ostream;
+using std::to_string;
 BigNumber::BigNumber():data("0"),sign(0){}
 BigNumber::BigNumber(const string &val):data(val){filter();judge();}
 BigNumber::BigNumber(const BigNumber &b):data(b.data),sign(b.sign){}
@@ -35,72 +38,86 @@ bool BigNumber::operator!=(const BigNumber &b) {
 int BigNumber::compare(const BigNumber& b) {
     return compare(sign, data, b.sign, b.data);
 }
+
 BigNumber BigNumber::operator+(const BigNumber &big) {
     int c_sign;
     string c_data;
     calculate('+', sign, data, big.sign, big.data, c_sign, c_data);
     return BigNumber(c_sign, c_data);
 }
+
 BigNumber BigNumber::operator-(const BigNumber &big) {
     int c_sign;
     string c_data;
     calculate('-', sign, data, big.sign, big.data, c_sign, c_data);
     return BigNumber(c_sign, c_data);
 }
+
 BigNumber BigNumber::operator*(const BigNumber &big) {
     int c_sign;
     string c_data;
     calculate('*', sign, data, big.sign, big.data, c_sign, c_data);
     return BigNumber(c_sign, c_data);
 }
+
 BigNumber BigNumber::operator/(const BigNumber &big) {
     int c_sign;
     string c_data;
     calculate('/', sign, data, big.sign, big.data, c_sign, c_data);
     return BigNumber(c_sign, c_data);
 }
+
 BigNumber BigNumber::operator%(const BigNumber &big) {
     int c_sign;
     string c_data;
     calculate('%', sign, data, big.sign, big.data, c_sign, c_data);
     return BigNumber(c_sign, c_data);
 }
+
 BigNumber& BigNumber::operator+=(const BigNumber &big) { 
     calculate('+', sign, data, big.sign, big.data, sign, data);
     return *this;
 }
+
 BigNumber& BigNumber::operator-=(const BigNumber &big) {
     calculate('-', sign, data, big.sign, big.data, sign, data);
     return *this;
 }
+
 BigNumber& BigNumber::operator*=(const BigNumber &big) {
     calculate('*', sign, data, big.sign, big.data, sign, data);
     return *this;
 }
+
 BigNumber& BigNumber::operator/=(const BigNumber &big) {
     calculate('/', sign, data, big.sign, big.data, sign, data);
     return *this;
 }
+
 BigNumber& BigNumber::operator%=(const BigNumber &big) {
     calculate('%', sign, data, big.sign, big.data, sign, data);
     return *this;
 }
+
 string BigNumber::value() const {
     string res = (sign == 0) ? "" : "-";
     return res + data;
 }
+
 int BigNumber::length() const {
     return data.length();
 }
 bool BigNumber::isodd() const {
     return (data[data.length() - 1] - '0') % 2 == 1;
 }
+
 istream& operator>>(istream& in, BigNumber& big) {
     in >> big.data;
     big.filter();
     big.judge();
     return in;
 }
+
 ostream& operator<<(ostream& out, BigNumber big) {
     out << big.value();
     return out;
@@ -109,6 +126,7 @@ ostream& operator<<(ostream& out, BigNumber big) {
 void BigNumber::filter() {
     sign = format(data);
 }
+
 void BigNumber::judge() {
     for (int i = 0; i < data.size(); i++) {
         if (isdigit(data[i])) continue;
@@ -118,6 +136,7 @@ void BigNumber::judge() {
         break;
     }
 }
+
 int BigNumber::format(string &s) {
     if (s == "") {
         s = "0";
@@ -128,6 +147,7 @@ int BigNumber::format(string &s) {
     s = string(s.begin() + ind, s.end());
     return (s == "0") ? 0 : flag;
 }
+
 int BigNumber::compare(const string &a, const string &b) {
     int lena = a.size(), lenb = b.size();
     if (lena > lenb) return 1;
@@ -138,6 +158,7 @@ int BigNumber::compare(const string &a, const string &b) {
     }
     return 0;
 }
+
 int BigNumber::compare(int sa, const  string &a, int sb, const string &b) {
     int code = 0, cmp = 0;
     code |= sa;
@@ -159,6 +180,7 @@ int BigNumber::compare(int sa, const  string &a, int sb, const string &b) {
     }
     return cmp;
 }
+
 void BigNumber::calculate(char op, int sa, const string &a, int sb, const string &b, int &sc, string &c){
     int code = 0;
     code |= sa;
@@ -221,6 +243,7 @@ void BigNumber::calculate(char op, int sa, const string &a, int sb, const string
     sc = (c[0] == '0') ? 0 : sc;
     return ;
 }
+
 bool BigNumber::less(const string &a, const string &b) {
     return compare(a, b) < 0;
 }
@@ -239,6 +262,7 @@ bool BigNumber::equal(const string &a, const string &b) {
 bool BigNumber::not_equal(const string &a, const string &b) {
     return compare(a, b) != 0;
 }
+
 string BigNumber::add(const string &a, const string &b) {
     if (a == "0") return b;
     if (b == "0") return a;
@@ -268,6 +292,7 @@ string BigNumber::add(const string &a, const string &b) {
     format(ans);
     return ans;
 }
+
 string BigNumber::subtract(const string &a, const string &b) {
     if (b == "0") return a;
     int ia = a.size() - 1, ib = b.size() - 1;
@@ -295,6 +320,7 @@ string BigNumber::subtract(const string &a, const string &b) {
     format(ans);
     return ans;
 }
+
 string BigNumber::multiply(const string &a, const string &b) {
     if (a == "0" || b == "0") return "0";
     int lena = a.size(), lenb = b.size();
@@ -326,6 +352,7 @@ string BigNumber::multiply(const string &a, const string &b) {
     delete[] result;
     return ans;
 }
+
 char BigNumber::search_digit(const string &a, const string &b) {
     char l = '0', r = '9';
     while (l < r) {
@@ -341,6 +368,7 @@ char BigNumber::search_digit(const string &a, const string &b) {
     }
     return l;
 }
+
 void BigNumber::divide(const string &a, const string &b, string &ans, string &remainder) {
     ans = "";
     remainder = "";
@@ -356,6 +384,7 @@ void BigNumber::divide(const string &a, const string &b, string &ans, string &re
         remainder = subtract(remainder, muls);
     }
 }
+
 string BigNumber::divide(const string &a, const string &b) {
     if (b == "0") {
         WARNING("division by zero: %s / %s\n", a.c_str(), b.c_str());
@@ -368,6 +397,7 @@ string BigNumber::divide(const string &a, const string &b) {
     format(ans);
     return ans;
 }
+
 string BigNumber::mod(const string &a, const string &b) {
     if (b == "0") {
         WARNING("division by zero: %s %% %s\n", a.c_str(), b.c_str());

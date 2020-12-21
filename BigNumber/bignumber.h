@@ -47,7 +47,7 @@ private:
     int compare(const std::string &, const std::string &);//非负数比较函数的底层函数
     int compare(int, const std::string &, int, const std::string &);//带符号比较函数
     void calculate(char, int, const std::string &, int, const std::string &, int &, std::string &);// 符号数计算器，计算得到的结果c_sign和c_data以参数形式返回
-    char search_digit(const std::string &, const std::string &);//寻找最后一个满足a=b*digit的digit, 除余算法用
+    char search_digit(const std::string &, const std::string &);//二分查找最后一个满足a=b*digit的digit, 除余算法用
     void divide(const std::string &, const std::string &, std::string &, std::string &);//除余算法的底层函数
     //标准非负数比较
     bool less(const std::string &, const std::string &);//a<b
