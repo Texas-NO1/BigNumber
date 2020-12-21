@@ -8,7 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <ctime>
-#include <BigNumber/bignumber.h>
+#include "BigNumber/bignumber.h"
 #include <cstdlib>
 #define MAX_N 10000
 #define P(a){\

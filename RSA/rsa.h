@@ -7,7 +7,6 @@
 
 #ifndef _RSA_H
 #define _RSA_H
-#include <bignumber.h>
 class RSA {
 public:
     void get_key(string &, string &, string &);
